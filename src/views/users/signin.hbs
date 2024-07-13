@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <div class="card mt-1 bg-black text-white rounded">
+      <div class="card-header text-center pt-5">
+        <h1 class="h4 text-white">
+          Inicio de Sesión
+        </h1>
+      </div>
+      
+      <i class="fa-solid fa-user mx-auto  " style="size: 440px;"></i>
+      <div class="card-body">
+        <form action="/users/signin" method="POST">
+          <div class="mb-3">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              class="form-control bg-dark text-white"
+              name="email"
+              placeholder="Email"
+              autofocus
+            />
+          </div>
+          <div class="mb-3">
+            <label for="passswore">Contraseña:</label>
+            <input
+              type="password"
+              class="form-control bg-dark text-white"
+              name="password"
+              placeholder="Password"
+            />
+          </div>
+          <div class="center">
+            <button class="btn btn-success btn-block">Iniciar sesión</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+

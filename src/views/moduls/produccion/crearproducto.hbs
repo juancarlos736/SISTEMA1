@@ -1,0 +1,152 @@
+<div class="d-flex justify-content-between mb-3">
+    <a href="/modulos/produccion" role="button" style="text-decoration: none;"> <i
+            class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+<h1>Crear producto</h1>
+<form action="/modulos/produccion/crearproducto" id="formulario" method="post">
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Seleccione el producto que desea crear</label>
+        <select class="form-select" aria-label="Default select example" name="id" required>
+            <option value="" selected disabled>Seleccione un balanceado</option>
+            {{#each formulas}}
+            <option value={{idbalanceado._id}}>{{idbalanceado.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Ingrese la cantidad de hechas que va a producir</label>
+        <br>
+        <div style="width: 50%;"><input class="form-control" name="cantidad" pattern="[1-9][0-9]*"
+                title="Por favor, ingrese un número entero válido" required></div>
+
+
+    </div>
+
+
+</form>
+<button type="submit" form="formulario" class="btn btn-primary">Aceptar</button>
+<br><br>
+<h1 class="titulo">Historial de producciones</h1>
+{{#each producciones}}
+<button class="accordion">{{this.day}}</button>
+
+<div class="panel">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Producciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Balanceado</th>
+                <th>Sacos</th>
+            </tr>
+            {{#each this.producto}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.cantidad}}</td>
+            </tr>
+            {{/each}}
+
+
+        </tbody>
+    </table>
+</div>
+{{/each}}
+
+
+<script>
+
+    function habilitarinput(id) {
+        let aux = document.getElementById(id)
+        aux.disabled = !aux.disabled
+    }
+
+    function anadirProducto() {
+        const formu = document.getElementById("formulario")
+
+        const campoProducto = formu[0].cloneNode(true)
+        const campoCantidad = document.createElement("input")
+        const espacio = document.createElement("br")
+        const linea = document.createElement("hr")
+        const aux1 = formu.length + 1
+        campoCantidad.className = "form-control"
+        campoCantidad.placeholder = "cantidad"
+        campoCantidad.name = aux1 + "cantidad"
+        campoProducto.name = aux1 + "producto"
+        console.log(campoProducto)
+        console.log(formu.length)
+
+        formu.appendChild(campoProducto)
+        formu.appendChild(campoCantidad)
+        formu.appendChild(espacio)
+        formu.appendChild(espacio)
+
+    }
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function () {
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+
+
+
+
+</script>
+
+
+
+<style>
+    button.accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+    button.accordion.active,
+    button.accordion:hover {
+        background-color: #ddd;
+    }
+
+    button.accordion:after {
+        content: '\02795';
+        font-size: 13px;
+        color: #777;
+        float: right;
+        margin-left: 5px;
+    }
+
+    button.accordion.active:after {
+        content: "\2796";
+    }
+
+    div.panel {
+        padding: 0 18px;
+        background-color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.6s ease-in-out;
+        opacity: 0;
+    }
+
+    div.panel.show {
+        opacity: 1;
+        max-height: 2000px;
+    }
+</style>

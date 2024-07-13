@@ -1,0 +1,160 @@
+<div class="d-flex justify-content-between mb-3">
+  <a href="/modulos" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+  <div>
+    <button type="button" class="btn btn-success btn-sm " onclick="imprimirContenido()">
+      <i class="fas fa-edit"></i>
+      Imprimir tabla
+    </button>
+    <button type="button" class="btn btn-success btn-sm " data-bs-toggle="modal" data-bs-target="#modalentrada">
+      <i class="fas fa-edit"></i>
+      Reporte
+    </button>
+  </div>
+
+</div>
+
+
+<!-- Modal Entrada-->
+<div class="modal fade " id="modalentrada" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Reporte</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/modulos/ventas/reporteclientes" method="post" id="entrada">
+
+          <div class="mb-3">
+            <label for="fecha">Fecha inicio:</label>
+            <input type="date" id="fecha1" name="fechainicio" required>
+          </div>
+          <div class="mb-3">
+            <label for="fecha">Fecha fin:</label>
+            <input type="date" id="fecha2" name="fechafin" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="entrada" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="d-flex justify-content-end mb-3">
+  <h3><b>Deuda total:</b> {{deudatotal}} </h3>
+</div>
+
+
+<div>
+  <h1 class="titulo">Clientes</h1>
+</div>
+
+<div class="mt-4 table-responsive" id="contenido-a-imprimir">
+  <table id="userTable" class="table">
+    <thead>
+      <tr class="mt-4">
+        <th>Nombre/Razon social</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Deuda</th>
+        <th>acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each clientes}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{direccion}}</td>
+        <td>{{telefono}}</td>
+        <td>{{deuda}}</td>
+        <td>
+          <a href="/modulos/ventas/{{_id}}" class=" btn btn-success btn-sm">
+            <i class="fas fa-edit"></i>
+            <span class="ml-2">Ver detalle </span>
+          </a>
+          {{#if ../isAdmin }}
+          <a href="/modulos/ventas/editarcliente/{{_id}}" class="btn btn-info btn-sm">
+            <i class="fas fa-edit"></i>
+            <span class="ml-2">Editar </span>
+          </a>
+          {{else}}
+          {{#if_equal editable "1"}}
+          <a href="/modulos/ventas/editarcliente/{{_id}}" class="btn btn-info btn-sm">
+            <i class="fas fa-edit"></i>
+            <span class="ml-2">Editar </span>
+          </a>
+          {{/if_equal}}
+
+          {{#if_equal editable "0"}}
+          <button type="submit" form="solicitud{{_id}}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>
+            <span class="ml-2">Solicitar permiso de edición </span></button>
+          <form id="solicitud{{_id}}" method="post" action="/modulos/ventas/specliente">
+            <input type="text" id="" name="idcliente" value="{{_id}}" style="display: none;"><br>
+          </form>
+          {{/if_equal}}
+
+          {{#if_equal editable "2"}}
+          <a class="btn btn-info btn-sm">
+            <i class="fas fa-edit"></i>
+            <span class="ml-2">Solicitud enviada</span>
+          </a>
+          {{/if_equal}}
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-4">
+  <a href="/modulos/ventas/agregarcliente" class="btn btn-primary">
+    <i class="fas fa-plus"></i> <!-- Ícono -->
+    <span class="ml-2">Agregar cliente</span> <!-- Texto con margen a la izquierda (ml-2) -->
+  </a>
+</div>
+
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    #contenido-a-imprimir,
+    #contenido-a-imprimir * {
+      visibility: visible;
+    }
+
+    #contenido-a-imprimir {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#userTable').DataTable();
+  });
+  function imprimirContenido() {
+    window.print();
+  }
+</script>

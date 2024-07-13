@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-between mb-3">
+    <a href="/modulos/compras" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+    <button type="button" class="btn btn-success btn-sm " onclick="imprimirContenido()">
+        <i class="fas fa-edit"></i>
+        Imprimir
+    </button>
+</div>
+
+<div id="contenido-a-imprimir">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" colspan="3">Reporte proveedores {{this.fechainicio}}  -  {{this.fechafin}} </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Proveedor</td>
+                <td>Monto comprado</td>
+
+            </tr>
+            {{#each this.proveedores}}
+            <tr>
+                <th scope="row">2</th>
+                <td>{{proveedor.name}}</td>
+                <td>{{total}}</td>
+
+            </tr>
+            {{/each}}
+
+            <tr>
+                <th scope="row">3</th>
+                <th colspan="1">Total</th>
+                <td>{{this.total}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+<style>
+/* Estilos para mejorar la impresión de la tabla */
+
+
+/* Estilos para ocultar el resto de la página durante la impresión */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #contenido-a-imprimir, #contenido-a-imprimir * {
+        visibility: visible;
+    }
+    #contenido-a-imprimir {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+</style>
+
+
+
+<script>
+function imprimirContenido() {
+    window.print();
+}
+</script>

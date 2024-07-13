@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-between mb-3">
+  <a href="/modulos/inventario" role="button" style="text-decoration: none;"> <i
+      class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+
+<div class="col-md-4 mx-auto">
+  <div class="card">
+    <div class="card-header bg-dark text-center">
+      <h3 class="text-white">Editar producto</h3>
+    </div>
+
+    <div class="card-body text-right">
+      <form method="post" action="/modulos/inventario/editar/{{producto._id}}">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre</label>
+          <input class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" required
+            value="{{producto.name}}">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Precio</label>
+          <input class="form-control" pattern="^\d+(\.\d{1,2})?$" value="{{producto.precio}}"
+            title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)" name="precio"
+            id="exampleInputPassword1" required value={{cantidad}}>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">Presentación</span>
+          <input type="text" aria-label="First name" class="form-control" name="presentacion" placeholder="ejem: 25.0"
+            required pattern="^\d+(\.\d{1,2})?$" title="Por favor, ingrese un valor decimal">
+          <input type="text" aria-label="Last name" class="form-control" name="presentacionmagnitud"
+            placeholder="ejem: Kg" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"><b>Proveedor</b></label>
+          <select class="form-select form-select-sm" aria-label="Small select example" required name="proveedor">
+            <option value="" disabled selected>Seleccione una opción</option>
+            {{#each proveedores}}
+            <option value={{_id}}> {{name}} </option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+          <a class="btn btn-primary" href="/modulos/inventario" role="button"> <i class="fas fa-times"></i> Cancelar</a>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Aceptar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

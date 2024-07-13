@@ -1,0 +1,173 @@
+<div class="d-flex justify-content-between mb-3">
+      <a href="/modulos/produccion" role="button" style="text-decoration: none;"> <i
+                  class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+<h1>Crear formula</h1>
+<form action="/modulos/produccion/agregarformula" id="formulario" method="post">
+      <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Seleccione el balanceado</label>
+            <select class="form-select" aria-label="Default select example" name="id" onchange="bloquearproducto(this)"
+                  required title="seleccione un producto">
+                  <option value="" disabled selected>Seleccione</option>
+                  {{#each balanceados}}
+                  <option value={{_id}}>{{name}}</option>
+                  {{/each}}
+            </select>
+      </div>
+      <hr class="bg-danger border-2 border-top border-danger" />
+
+      <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Seleccione los productos que son parte de la formula y
+                  sus respectivas cantidades</label><br>
+            <div id="productosContenedor">
+                  <div class="input-group mb-3 productos" id="productos">
+
+                        <span class="input-group-text" id="basic-addon1">Producto</span>
+                        <select class="form-select" aria-label="Default select example" name="productos" required>
+                              <option value="" disabled selected>Seleccione</option>
+                              {{#each productos}}
+                              <option value={{_id}}>{{name}}</option>
+                              {{/each}}
+
+                        </select>
+                        <span class="input-group-text " id="">Cantidad</span>
+                        <input class="form-control" name="cantidad" pattern="^\d+(\.\d{1,4})?$"
+                              title="Por favor, ingrese un número decimal válido"
+                              onchange="calcularcostototalproductos()" id="cantidad">
+                        <span class="input-group-text" id="">Precio unitario</span>
+                        <input class="form-control" name="preciounitario" pattern="^\d+(\.\d{1,4})?$"
+                              title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)"
+                              onchange="calcularcostototalproductos()" id="preciounitario">
+                        <span class="input-group-text" id="">Precio total</span>
+                        <input class="form-control" name="preciototal" pattern="^\d+(\.\d{1,4})?$"
+                              title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)"
+                              onchange="calcularcostototalproductos()" id="preciototal">
+                  </div>
+
+            </div>
+            <div class=" mb-3">
+                  <a class="btn btn-primary btn-sm" onclick="anadirProducto()" role="button"> <i
+                              class="fas fa-plus"></i> </a>
+                  <a class="btn btn-primary btn-sm" onclick="quitarProducto()" role="button"> <i
+                              class="fas fa-minus"></i> </a>
+            </div>
+            <hr class="bg-danger border-2 border-top border-danger" />
+            <label for="exampleInputPassword1" class="form-label">Gastos adicionales</label><br>
+            <div id="contenedorGastos">
+                  <div class="input-group mb-3 gastos" id="gastos">
+                        <span class="input-group-text" id="basic-addon1">Razon</span>
+                        <input class="form-control" name="razon" required>
+                        <span class="input-group-text" id="basic-addon1">Precio</span>
+                        <input class="form-control" name="precioadicional" pattern="^\d+(\.\d{1,4})?$"
+                              title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)"
+                              onchange="calcularcostototalproductos()" required>
+                  </div>
+            </div>
+            <div class=" mb-3">
+                  <a class="btn btn-primary btn-sm" onclick="anadirgasto()" role="button"> <i class="fas fa-plus"></i>
+                  </a>
+                  <a class="btn btn-primary btn-sm" onclick="quitarGasto()" role="button"> <i class="fas fa-minus"></i>
+                  </a>
+            </div>
+      </div>
+      <div class="input-group mb-3" id="gastos">
+            <span class="input-group-text">Costo total productos</span>
+            <input class="form-control" name="costototalproductos" pattern="^\d+(\.\d{1,2})?$"
+                  title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)"
+                  id="costototalproductos">
+            <span class="input-group-text" id="basic-addon1">Costo total</span>
+            <input class="form-control" name="costototal" pattern="^\d+(\.\d{1,2})?$"
+                  title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)" id="costototal">
+            <span class="input-group-text" id="basic-addon1">Sacos de balanceado </span>
+            <input class="form-control" pattern="^\d+$" title="Por favor, ingrese un número entero válido"
+                  name="totalpesoproductos">
+      </div>
+</form>
+
+<button type="submit" form="formulario" class="btn btn-primary">Aceptar</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+      function anadirProducto() {
+            const divproductos = document.getElementById("productosContenedor")
+            const producto = document.getElementById("productos").cloneNode(true)
+            const aux = divproductos.childNodes.length
+            producto.id = aux
+
+            producto.childNodes[7].value = ""
+            producto.childNodes[11].value = ""
+            producto.childNodes[15].value = ""
+            divproductos.appendChild(producto)
+            calcularcostototalproductos()
+      }
+      function anadirgasto() {
+            const divproductos = document.getElementById("contenedorGastos")
+            const producto = document.getElementById("gastos").cloneNode(true)
+            const aux = divproductos.childNodes.length
+            producto.id = aux
+            producto.childNodes[3].value = ""
+            producto.childNodes[7].value = ""
+            divproductos.appendChild(producto)
+            calcularcostototalproductos()
+      }
+
+      function quitarProducto() {
+            const divproductos = document.getElementsByClassName("productos")
+            if (divproductos.length > 1) {
+                  divproductos[divproductos.length - 1].remove()
+            }
+            calcularcostototalproductos()
+      }
+      function quitarGasto() {
+            const divproductos = document.getElementsByClassName("gastos")
+            if (divproductos.length > 1) {
+                  divproductos[divproductos.length - 1].remove()
+            }
+            calcularcostototalproductos()
+      }
+
+      function calcularcostototalproductos() {
+            const cantidades = document.getElementsByName("cantidad")
+            const preciosuni = document.getElementsByName("preciounitario")
+            const preciostotuni = document.getElementsByName("preciototal")
+            const costosadicionales = document.getElementsByName("precioadicional")
+            for (let i = 0; i < cantidades.length; i++) {
+                  preciostotuni[i].value = (cantidades[i].value * preciosuni[i].value).toFixed(4)
+            }
+
+            const totalproductos = document.getElementById("costototalproductos")
+            const total = document.getElementById("costototal")
+            let aux = 0
+            let aux2 = 0
+            for (let i = 0; i < preciostotuni.length; i++) {
+                  aux += Number(preciostotuni[i].value)
+                  console.log()
+            }
+            aux2 = aux
+            for (let i = 0; i < costosadicionales.length; i++) {
+                  aux2 += Number(costosadicionales[i].value)
+                  console.log()
+            }
+
+            totalproductos.value = aux.toFixed(2)
+            total.value = aux2.toFixed(2)
+
+      }
+
+
+
+
+
+</script>

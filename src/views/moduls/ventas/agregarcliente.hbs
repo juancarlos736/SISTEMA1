@@ -1,0 +1,41 @@
+
+<div class="d-flex justify-content-between mb-3">
+  <a  href="/modulos/ventas" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+
+
+
+<div class="col-md-4 mx-auto">
+  <div class="card">
+    <div class="card-header bg-dark text-center">
+      <h3 class="text-white">Agregar cliente</h3>
+    </div>
+
+    <div class="card-body text-right">
+      <form method="post" action="/modulos/ventas/agregarcliente">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre</label>
+          <input class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Direccion</label>
+          <input class="form-control" name="direccion" id="exampleInputPassword1" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Telefono</label>
+          <input class="form-control" name="telefono" id="exampleInputPassword1" required>
+        </div>
+
+        <div class="d-flex justify-content-between mb-3">
+          <a class="btn btn-primary" href="/modulos/ventas" role="button"> <i class="fas fa-times"></i> Cancelar</a>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

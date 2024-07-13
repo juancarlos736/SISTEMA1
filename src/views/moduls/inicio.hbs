@@ -1,0 +1,39 @@
+<div>
+  <br>
+  <br>
+  <div class="containerInicio">
+
+    <div class="cardsInicio">
+
+      <a class="ainicio" href="/modulos/inventario">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-boxes-stacked" style="width: 100px;"></i> <span>Inventario</span></div>
+      </a>
+
+      <a class="ainicio" href="/modulos/produccion">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-city"> </i>Producción</div>
+      </a>
+
+      <a href="modulos/compras" class="ainicio">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-cart-plus"></i>Compras</div>
+      </a>
+      {{#if isAdmin }}
+      <a class="ainicio" href="/administration">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-users"> </i>Usuarios</div>
+      </a>
+      {{/if}}
+      <a class="ainicio" href="/modulos/ventas">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-cart-arrow-down"></i>Ventas</div>
+      </a>
+
+      <a href="/modulos/inventarioexterior" class="ainicio">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-dolly"></i>Inventario externo</div>
+      </a>
+      <a href="/modulos/inventariobalanceado" class="ainicio">
+        <div class="cardInicio btn btn-secondary"><i class="fa-solid fa-box"></i>Inventario balanceados</div>
+      </a>
+
+    </div>
+  </div>
+</div>
+{{messages}}
+{{success_msg}}

@@ -1,0 +1,165 @@
+<div class="d-flex justify-content-between mb-3">
+  <a  href="/modulos" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+
+<div>
+  <h1 class="titulo">Formulas</h1>
+</div>
+
+{{#each formulas}}
+<button class="accordion">{{idbalanceado.name}}</button>
+
+<div class="panel">
+  <h5>Lista de productos</h5>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Producto</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Precio unitario</th>
+        <th scope="col">Precio total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each productos}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{cantidadproducto}}</td>
+        <td>{{preciosunitarios}}</td>
+        <td>{{preciototalindividual}}</td>
+      </tr>
+      {{/each}}
+
+
+    </tbody>
+  </table>
+  <h5>Gastos adicionales</h5>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Razon</th>
+        <th scope="col">Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each costosadicionalesrazon}}
+      <tr>
+        <td>{{razon}}</td>
+        <td>{{costo}}</td>
+      </tr>
+      {{/each}}
+
+
+    </tbody>
+  </table>
+  <p><b>Costo total productos:</b> {{costototalproductos}} </p>
+  <p><b>Costo total:</b> {{costototal}} </p>
+  <p><b>Sacos de balanceado:</b> {{pesototalproductos}} </p>
+</div>
+{{/each}}
+
+
+
+
+
+
+<div class="mt-4">
+  <a href="/modulos/produccion/agregarformula" class="btn btn-primary">
+    <i class="fas fa-plus"></i>
+    <span class="ml-2">Agregar formula </span>
+  </a>
+  <a href="/modulos/produccion/crearproducto" class="btn btn-primary">
+    <i class="fas fa-plus"></i>
+    <span class="ml-2">Nueva producción</span>
+  </a>
+</div>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#userTable').DataTable();
+  });
+
+
+
+  function asignarid(id) {
+    console.log(id)
+    url1 = "/modulos/inventario/ingresar/" + id
+    url2 = "/modulos/inventario/despachar/" + id
+    document.getElementById("entrada").setAttribute("action", url1)
+    document.getElementById("salida").setAttribute("action", url2)
+  }
+
+
+
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function () {
+      this.classList.toggle("active");
+      this.nextElementSibling.classList.toggle("show");
+    }
+  }
+
+
+</script>
+
+<style>
+  button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+  }
+
+  button.accordion.active,
+  button.accordion:hover {
+    background-color: #ddd;
+  }
+
+  button.accordion:after {
+    content: '\02795';
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+  }
+
+  button.accordion.active:after {
+    content: "\2796";
+  }
+
+  div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    opacity: 0;
+  }
+
+  div.panel.show {
+    opacity: 1;
+    max-height: 4000px;
+  }
+</style>

@@ -1,0 +1,95 @@
+<div class="d-flex justify-content-between mb-3">
+    <a href="/modulos/ventas" role="button" style="text-decoration: none;"> <i
+            class="fa-solid fa-chevron-left"></i>atras</a>
+    <div>
+        <button type="button" class="btn btn-success btn-sm " onclick="imprimirContenido()">
+            <i class="fas fa-edit"></i>
+            Imprimir tabla
+        </button>
+        <button type="button" class="btn btn-success btn-sm " onclick="imprimirContenido()">
+            <i class="fas fa-edit"></i>
+            Imprimir
+        </button>
+    </div>
+
+</div>
+
+<div id="contenido-a-imprimir">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col" colspan="4">Reporte clientes {{this.fechainicio}} - {{this.fechafin}} </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {{#each this.clientes}}
+            <tr class="table-success">
+                <th>Cliente</th>
+                <td>{{this.name.name}}</td>
+                <th>Total</th>
+                <td>{{this.total}}</td>
+            </tr>
+            <tr>
+                <th colspan="2">Producto</th>
+                <th colspan="2">Total</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{balanceado.name}}</td>
+                <td colspan="2">{{balanceado.total}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{pollos.name}}</td>
+                <td colspan="2">{{pollos.total}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{cerdos.name}}</td>
+                <td colspan="2">{{cerdos.total}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{otros.name}}</td>
+                <td colspan="2">{{otros.total}}</td>
+            </tr>
+            {{/each}}
+            <tr class="table-info">
+                <th colspan="2">Total</th>
+                <td colspan="2">{{this.total}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+<style>
+    /* Estilos para mejorar la impresión de la tabla */
+
+
+    /* Estilos para ocultar el resto de la página durante la impresión */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #contenido-a-imprimir,
+        #contenido-a-imprimir * {
+            visibility: visible;
+        }
+
+        #contenido-a-imprimir {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+</style>
+
+
+
+<script>
+    function imprimirContenido() {
+        window.print();
+    }
+</script>

@@ -1,0 +1,69 @@
+body {
+  background-color: LightGray	 ;
+}
+
+.titulo{/*Gestor de archivos*/
+background-color: #000;
+color: #eae6e6;
+text-align: center;
+padding: 5px;
+margin: 0;
+}
+
+.logo {
+width: 100px;
+height: 100px;
+}
+
+.center {/*boton signIn/signUp*/
+text-align: center;
+}
+
+.circulo {
+width: 150px; /* Ancho del círculo */
+height: 150px; /* Alto del círculo */
+border-radius: 50%; /* Establece el radio para crear un círculo perfecto */
+overflow: hidden; /* Oculta el contenido que se sale del círculo */
+border: 2px solid #333; /* Añade un borde opcional */  
+}
+
+.circulo img {
+width: 100%; /* Asegura que la imagen llene completamente el círculo */
+height: auto; /* Mantiene la proporción original de la imagen */
+}
+
+.footer .fter{
+text-align: center;
+}
+
+
+
+.containerInicio {
+  display: flex;
+  justify-content: center;
+}
+
+.cardsInicio {
+  display: grid;
+  width: 1000px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 15px;
+}
+
+/* Style the cards */
+.cardInicio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color:#FFA500		;
+  color: white;
+  font-size: 150%;
+  height: 220px;
+  border-radius: 2%;
+  font-weight: 900;
+}
+.ainicio{
+  text-decoration: none;
+  
+}

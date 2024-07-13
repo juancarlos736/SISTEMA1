@@ -1,0 +1,171 @@
+
+<div class="d-flex justify-content-between mb-3">
+  <a href="/modulos" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+  <button type="button" class="btn btn-success btn-sm " onclick="imprimirContenido()">
+    <i class="fas fa-edit"></i>
+    Imprimir tabla
+  </button>
+</div>
+
+
+
+
+
+<div>
+  <h1 class="titulo">Productos </h1>
+</div>
+
+<div class="mt-4  table-responsive" id="contenido-a-imprimir">
+  <table id="userTable" class="table">
+    <thead>
+      <tr class="mt-4">
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Presentación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each productos}}
+
+      <tr>
+
+        <td><a href="/modulos/inventario2/{{_id}}" style="text-decoration: none;">{{name}}</a></td>
+        <td>{{cantidad}} </td>
+        <td>{{presentacionmagnitud}} </td>
+
+        <td>
+
+          <!-- Button trigger modal -->
+          <button type="button" onclick="asignarid('{{_id}}')" class="btn btn-success btn-sm" data-bs-toggle="modal"
+            data-bs-target="#modalentrada">
+            <i class="fas fa-edit"></i>
+            Entrada
+          </button>
+          <!-- Button trigger modal -->
+          <button type="button" onclick="asignarid('{{_id}}')" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+            data-bs-target="#modalsalida">
+            <i class="fas fa-edit"></i>
+            Salida
+          </button>
+
+
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<!-- Modal Entrada-->
+<div class="modal fade " id="modalentrada" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Entrada de producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="post" id="entrada">
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Ingrese el monto a agregar</label>
+            <input class="form-control" name="cantidad" required pattern="^\d+(\.\d{1,2})?$"
+              title="Por favor, ingrese un número decimal válido">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Detalle</label>
+            <textarea class="form-control" name="detalle" required></textarea>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="entrada" class="btn btn-primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal Salida-->
+<div class="modal fade " id="modalsalida" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Salida de Producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="post" id="salida">
+
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Ingrese el monto a despachar</label>
+            <input class="form-control" name="cantidad" required pattern="^\d+(\.\d{1,2})?$"
+              title="Por favor, ingrese un número decimal válido">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Detalle</label>
+            <textarea class="form-control" name="detalle" required></textarea>
+          </div>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="salida" class="btn btn-primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    #contenido-a-imprimir,
+    #contenido-a-imprimir * {
+      visibility: visible;
+    }
+
+    #contenido-a-imprimir {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#userTable').DataTable();
+  });
+
+
+
+  function asignarid(id) {
+    console.log(id)
+    url1 = "/modulos/inventario2/ingresar/" + id
+    url2 = "/modulos/inventario2/despachar/" + id
+    document.getElementById("entrada").setAttribute("action", url1)
+    document.getElementById("salida").setAttribute("action", url2)
+  }
+  function imprimirContenido() {
+    window.print();
+  }
+</script>

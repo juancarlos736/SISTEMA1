@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <div class="card mt-1 bg-black text-white">
+      <div class="card-header pt-5">
+        <h4 class="text-center">
+          Account Register
+        </h4>
+      </div>
+      <img
+        class="mx-auto d-block logo m-4"
+        src="/img/fis.png"
+        alt="Logo"
+      />
+      <div class="card-body">
+        <form action="/users/signup" method="POST">
+          <div class="mb-3">
+            <label for="name">Name:</label>
+            <input
+              type="text"
+              class="form-control bg-dark text-white"
+              name="name"
+              placeholder="Name"
+              value="{{name}}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              class="form-control bg-dark text-white"
+              name="email"
+              placeholder="Email"
+              value="{{email}}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="rol">Rol:</label>
+            <select class="form-select form-select-sm bg-dark text-white" aria-label=".form-select-sm example" name="rol" required>
+              <option selected disabled value>--Selecciona el rol--</option>
+              <option value="admin">Admin</option>
+              <option value="decanato-fis">Decanato</option>
+              <option value="subdecanato-fis">Sub-decanato</option>
+              <option value="jefatura-fis">Jefatura</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control bg-dark text-white"
+              name="password"
+              placeholder="Password"
+              value="{{password}}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password">Confirm Password:</label>
+            <input
+              type="password"
+              class="form-control bg-dark text-white"
+              name="confirm_password"
+              placeholder="Confirm Password"
+              value="{{confirm_password}}"
+            />
+          </div>
+          <div class="center">
+            <button class="btn btn-success btn-block">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div>

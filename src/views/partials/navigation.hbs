@@ -1,0 +1,196 @@
+<script src="/js/script.js"></script>
+<nav class="navbar navbar-expand-lg  bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SISTEMA DE INVENTARIO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+      aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {{#if user}}
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {{#if isAdmin }}
+        <li class="nav-item">
+          <button type="button" id="botonmensajes" class="nav-link  position-relative" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight">
+            MENSAJES
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{mensajes.nummensajes}}
+              <span class="visually-hidden">unread messages</span>
+            </span>
+          </button>
+        </li>
+        {{/if}}
+
+        <li class="nav-item">
+          <a class="nav-link" href="/modulos">Inicio</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            MODULOS
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/modulos/inventario">
+                <i class="fa-solid fa-boxes-stacked"></i>  Inventario
+              </a></li>
+            <li> <a class="dropdown-item" href="/modulos/produccion">
+                <i class="fa-solid fa-city"> </i> Producción
+              </a></li>
+            <li><a class="dropdown-item" href="/modulos/compras">
+                <i class="fa-solid fa-cart-plus"></i> Compras
+              </a></li>
+            <li><a class="dropdown-item" href="/modulos/ventas">
+                <i class="fa-solid fa-cart-arrow-down"></i> Ventas
+              </a></li>
+            {{#if isAdmin }}
+            <li><a class="dropdown-item" href="/administration">
+                <i class="fa-solid fa-users"> </i> Usuarios
+              </a></li>
+
+            {{/if}}
+            <li><a class="dropdown-item" href="/modulos/inventarioexterior">
+                <i class="fa-solid fa-dolly"></i> Inventario externo
+              </a></li>
+              <li><a class="dropdown-item" href="/modulos/inventariobalanceado">
+                <i class="fa-solid fa-box"></i> Inventario balanceados
+              </a></li>
+
+          </ul>
+        </li>
+
+      </ul>
+      <ul class="navbar-nav  mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/users/logout">
+            <span class="fas fa-sign-out-alt"></span> Salir
+          </a>
+        </li>
+      </ul>
+
+    </div>
+    {{/if}}
+  </div>
+</nav>
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Mensajes</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <div id="divcontene">
+      {{#each mensajes}}
+
+
+      <div>
+        <form action="/modulos/procesarsolicitud" id="formrespuesta{{_id}}" name="formrespuesta{{_id}}" method="post">
+          <input type="text" id="respuesta{{_id}}" name="respuesta" style="display: none;">
+          <input type="text" id="idmensaje{{_id}}" name="idmensaje" style="display: none;" value="{{_id}}">
+          <input type="text" id="idelemento{{_id}}" name="idelemento" style="display: none;"
+            value="{{idproducto._id}}{{idproveedor._id}}{{idcliente._id}}{{idventa._id}}{{idcompra._id}}{{idpagocompra._id}}{{idpagoventa._id}}">
+          <input type="text" id="tipoelemento{{_id}}" name="tipoelemento" style="display: none;"
+            value="{{tipoelemento}}">
+        </form>
+        <div class="mensaje"><b></b>{{idusuario.name}} desea {{tipooperacion}} el/la {{tipoelemento}} 
+          "{{idproducto.name}}{{idproveedor.name}}{{idcliente.name}}"
+          <br>
+          <button type="button" form="formrespuesta{{_id}}" onclick="enviaraceptar('{{_id}}','aceptar')" id="enviarsi"
+            class="btn btn-sm btn-success">
+            <i class="fa-solid fa-check"></i>
+            Permitir
+          </button>
+
+          <button type="button" form="formrespuesta{{_id}}" onclick="enviaraceptar('{{_id}}','denegar')"
+            class="btn btn-sm btn-danger">
+            <i class="fa-solid fa-xmark"></i>
+            No permitir
+          </button>
+        </div>
+      </div>
+
+      {{/each}}
+    </div>
+
+  </div>
+</div>
+
+
+
+<style>
+  .contenedor-mensajes {
+    position: fixed;
+    /* Para mantenerlo fijo en la ventana */
+    top: 0;
+    /* Ajustar según sea necesario */
+    right: 0;
+    /* Ajustar según sea necesario */
+    width: 200px;
+    /* Ancho del contenedor de mensajes */
+  }
+
+  .mensaje {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /* Bordes redondeados */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Sombra */
+    padding: 10px;
+    margin-bottom: 10px;
+    /* Ajustar estilos según sea necesario */
+  }
+</style>
+<!-- Hacemos refrencia al archivo handlebars -->
+
+<script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
+
+<script id="entry-template" type="text/x-handlebars-template">
+  <div class="entry">
+    <h1>dfcdcsdcs{{title}}</h1>
+  </div>
+</script>
+
+
+<script>
+  function enviaraceptar(id, resp) {
+    var respuesta = resp
+    var idmensaje = document.getElementById('idmensaje' + id).value;
+    var idelemento = document.getElementById('idelemento' + id).value;
+    var tipoelemento = document.getElementById('tipoelemento' + id).value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/modulos/procesarsolicitud', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          const respuesta = JSON.parse(xhr.responseText)
+          location.reload();
+        } else {
+          console.error('Error al enviar el formulario');
+        }
+      }
+    };
+    xhr.send(JSON.stringify({
+      "respuesta": respuesta, "idmensaje":
+        idmensaje, "idelemento": idelemento, "tipoelemento": tipoelemento
+    }));
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+</script>

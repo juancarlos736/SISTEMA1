@@ -1,0 +1,1008 @@
+<div class="d-flex justify-content-between mb-3">
+  <a  href="/modulos/ventas" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+<div style="display: flex; justify-content:space-between;">
+    <h1> {{cliente.name}} </h1>
+    <h3><b>Deuda: </b>{{cliente.deuda}}$</h3>
+</div>
+
+
+
+<div class="mt-4">
+    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalentrada">
+        <i class="fas fa-plus"></i>
+        Agregar Venta
+    </button>
+</div>
+<br>
+<hr>
+
+
+
+<!-- Modal Compra-->
+<div class="modal fade " id="modalentrada" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Venta</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card">
+                <div class="modal-body">
+                    <div class="card-body text-right">
+                        <form method="post" action="/modulos/ventas/nuevaventa/{{id}}" id="formulario">
+                            <div class="mb-3">
+                                <label class="form-label"><b>Numero de factura</b></label>
+                                <input class="form-control form-control-sm" name="codigoventa" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><b>Detalle</b></label>
+                                <textarea class="form-control form-control-sm" name="detalle"
+                                    id="floatingTextarea"></textarea>
+                            </div>
+                            <label class="form-label"><b>Lista de Productos</b></label>
+                            <div id="productosContenedor">
+                                <div id="productos" class="claseproductos">
+                                    <div class="mb-3">
+                                        <label class="form-label">Producto</label>
+                                    <select class="form-select form-select-sm selectproductos"
+                                        aria-label="Small select example" name="productos" required>
+                                        <option value="" selected disabled>Seleccione un producto</option>
+                                        <option value="balanceado" >Balanceado</option>
+                                        <option value="pollos" >Cerdos</option>
+                                        <option value="cerdos" >Pollos</option>
+                                        <option value="otros" >Otros</option>
+                                    </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label ">Cantidad</label>
+                                        <input class="form-control form-control-sm cantidadpro" name="cantidad"
+                                            onchange="calcularsubtotal()" pattern="^\d+$"
+                                            title="Por favor, ingrese un número entero válido" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label ">Precio</label>
+                                        <input class="form-control form-control-sm preciopro" name="precio" required
+                                            onchange="calcularsubtotal()" pattern="^\d+(\.\d{1,2})?$"
+                                            title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3 align-self-end">
+                                <label class="form-label">Subtotal</label>
+                                <input class="form-control form-control-sm " name="subtotal" required id="subtotal"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)">
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 align-self-end">
+                                <label class="form-label">Descuento %</label>
+                                <input class="form-control form-control-sm " name="descuento" required id="descuento"
+                                    onchange="calcularsubtotal()" pattern="^(100(\.00?)?|\d{1,2}(\.\d{1,2})?)$"
+                                    title="Por favor, ingrese un número decimal válido en el rango de 0 a 100 con hasta dos decimales">
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 align-self-end">
+                                <label class="form-label">IVA %</label>
+                                <input class="form-control form-control-sm " name="iva" required id="iva"
+                                    onchange="calcularsubtotal()" pattern="^(100(\.00?)?|\d{1,2}(\.\d{1,2})?)$"
+                                    title="Por favor, ingrese un número decimal válido en el rango de 0 a 100 con hasta dos decimales">
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3 align-self-end">
+                                <label class="form-label">Total</label>
+                                <input class="form-control form-control-sm " name="total" required id="total"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)">
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <a class="btn btn-primary btn-sm" onclick="anadirProducto()" role="button"> <i
+                                        class="fas fa-plus"></i> </a>
+                                <a class="btn btn-primary btn-sm" onclick="todos()" role="button"> <i
+                                        class="fas fa-minus"></i> </a>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="formulario" class="btn btn-primary btn-sm"><i
+                                class="fas fa-save"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal nuevo pago-->
+<div class="modal fade " id="modalsalida" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Pago</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card">
+                <div class="modal-body">
+                    <div class="card-body text-right">
+                        <form method="post" action="/modulos/ventas/nuevopago/{{id}}" id="formpago">
+                            <div class="mb-3">
+                                <label class="form-label"><b>Monto</b></label>
+                                <input class="form-control form-control-sm" name="monto" id="monto" required
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    title="Por favor, ingrese una cantidad de dinero válida (por ejemplo: 100.00)"
+                                    onchange="controlarmonto()">
+                            </div>
+                            <div class="mb-3" style="display: none;">
+                                <label class="form-label"><b>Monto</b></label>
+                                <input class="form-control form-control-sm" name="idventa" id="idventa">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><b>Tipo de pago</b></label>
+                                <select class="form-select form-select-sm" aria-label="Small select example" required
+                                    name="tipo" id="opciones">
+                                    <option value="" disabled selected>Seleccione una opción</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Transferencia bancaria">Tranferencia bancaria</option>
+                                </select>
+                            </div>
+                            <div id="divCheque" class="oculto">
+                                <div class="mb-3">
+                                    <label class="form-label"><b>Banco</b></label>
+                                    <input class="form-control form-control-sm" name="bancocheque" id="bancocheque">
+                                    <label class="form-label"><b>Número de cuenta</b></label>
+                                    <input class="form-control form-control-sm" name="numerocuentacheque"
+                                        id="numerocuentacheque">
+                                    <label class="form-label"><b>Número de cheque</b></label>
+                                    <input class="form-control form-control-sm" name="numerocheque" id="numerocheque">
+                                    <label class="form-label"><b>Fecha de giro</b></label>
+                                    <input class="form-control form-control-sm" name="fechagirocheque"
+                                        id="fechagirocheque">
+                                </div>
+                            </div>
+                            <div id="divEfectivo" class="oculto">
+                                <select class="form-select form-select-sm" aria-label="Small select example"
+                                    name="tipoefectivo" id="tipoefectivo">
+                                    <option value="" disabled selected>Seleccione una opción</option>
+                                    <option value="cajachica">Caja chica</option>
+                                    <option value="general">General</option>
+                                </select>
+                            </div>
+                            <div id="divTransferencia bancaria" class="oculto">
+                                <label class="form-label"><b>Banco origen</b></label>
+                                <input class="form-control form-control-sm" name="bancoorigentransferencia"
+                                    id="bancoorigentransferencia">
+                                <label class="form-label"><b>Numero de cuenta origen</b></label>
+                                <input class="form-control form-control-sm" name="cuentaorigentransferencia"
+                                    id="cuentaorigentransferencia">
+                                <label class="form-label"><b>Banco destino</b></label>
+                                <input class="form-control form-control-sm" name="bancodestinotransferencia"
+                                    id="bancodestinotransferencia">
+                                <label class="form-label"><b>Numero de cuenta destino</b></label>
+                                <input class="form-control form-control-sm" name="cuentadestinotransferencia"
+                                    id="cuentadestinotransferencia">
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="formpago" class="btn btn-primary btn-sm" id="botonguardarpago"><i
+                                class="fas fa-save"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal retencion-->
+<div class="modal fade " id="retencion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar retención</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card">
+                <div class="modal-body">
+                    <div class="card-body text-right">
+                        <form method="post" action="/modulos/ventas/agregarretencion/{{id}}" id="formretencion">
+                            <div class="mb-3">
+                                <label class="form-label"><b>Valor retención</b></label>
+                                <input class="form-control form-control-sm" name="retencion" id="monto" required
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    title="Por favor, ingrese un número decimal válido con hasta dos decimales"
+                                    onchange="controlarmonto()">
+                                <input class="form-control form-control-sm" name="idventa" id="idventa2"
+                                    style="display: none;">
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="formretencion" class="btn btn-primary btn-sm"
+                            id="botonguardarpago"><i class="fas fa-save"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<h1 class="titulo">Historial de ventas</h1>
+<br>
+<h5>Por cobrar</h5>
+{{#each ventas}}
+<button class="accordion porcobrar">
+    <div style="display: flex; justify-content: space-between;">
+        <span><b>Venta:</b> {{codigoventa}}</span>
+        <span><b>Fecha:</b> {{createdAt}}</span>
+        <span><b>Monto por cobrar:</b> {{montoporpagar}}</span>
+    </div>
+</button>
+
+<div class="panel">
+    <div class="col-md-12 mx-auto table-responsive" id="{{montoporpagar}}">
+        <table border="1" class="table table-bordered table-sm .">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4">
+                        {{#if ../isAdmin }}
+                        <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                class="fa-solid fa-trash"></i>
+                            <span class="ml-2">Eliminar </span></button>
+                        <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarventa?_method=DELETE">
+                            <input type="text" name="venta" value="{{_id}}" style="display: none;"><br>
+                            <input type="text" name="cliente" value="{{idcliente}}" style="display: none;"><br>
+                        </form>
+                        {{else}}
+                        {{#if_equal editable "1"}}
+                        <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                class="fa-solid fa-trash"></i>
+                            <span class="ml-2">Eliminar </span></button>
+                        <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarventa?_method=DELETE">
+                            <input type="text" name="venta" value="{{_id}}" style="display: none;"><br>
+                            <input type="text" name="cliente" value="{{idcliente}}" style="display: none;"><br>
+                        </form>
+                        {{/if_equal}}
+
+                        {{#if_equal editable "0"}}
+                        <button type="submit" form="solicitud{{_id}}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>
+                            <span class="ml-2">Solicitar permiso para eliminar </span></button>
+                        <form id="solicitud{{_id}}" method="post" action="/modulos/ventas/speventa">
+                            <input type="text" id="" name="idventa" value="{{_id}}" style="display: none;"><br>
+                        </form>
+
+                        {{/if_equal}}
+
+                        {{#if_equal editable "2"}}
+                        <a class="btn btn-info btn-sm">
+                            <i class="fas fa-edit"></i>
+                            <span class="ml-2">Solicitud enviada</span>
+                        </a>
+                        {{/if_equal}}
+                        {{/if}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="2" class="">Detalle</th>
+                    <td colspan="2">{{detalle}} </td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="2">Fecha</th>
+                    <td colspan="2">{{createdAt}} </td>
+                </tr>
+                <tr>
+                    <th scope="col" colspan="4" class="titulo ">Productos</th>
+                </tr>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Total</th>
+                </tr>
+                {{#each productosdet}}
+                <tr>
+                    <td>{{name}} </td>
+                    <td>{{cantidad}} </td>
+                    <td>{{precio}}$ </td>
+                    <td>{{totalproducto}}$ </td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <th scope="row" colspan="2">Subtotal</th>
+                    <td colspan="2">{{subtotal}}$ </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Descuento</th>
+                    <td colspan="2">{{descuento}}%</td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Total</th>
+                    <td colspan="2">{{total}}$ </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Retención</th>
+                    <td colspan="2">{{retencion}}$ &nbsp
+                        {{#if pagos}}
+                        <span>!Ya no se puede editar la retención!</span>
+                        {{else}}
+                        <button type="button" onclick="asignarid('{{_id}}')" data-bs-toggle="modal"
+                            data-bs-target="#retencion">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        {{/if}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Por cobrar</th>
+                    <td colspan="2" id="porpagar{{_id}}"> {{montoporpagar}}</td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="4" class="titulo table-active  table-info">Pagos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" colspan="4"><button type="button" onclick="asignarid('{{_id}}')"
+                            class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalsalida">
+                            <i class="fas fa-plus"></i>
+                            Agregar Pago
+                        </button></th>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        {{#each pagos}}
+                        <button class="accordion">pago </button>
+                        <div class="panel">
+                            <br>
+                            {{#if isAdmin }}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                    class="fa-solid fa-trash"></i>
+                                <span class="ml-2">Eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarpago?_method=DELETE">
+                                <input type="text" name="idpago" value="{{_id}}" style="display: none;"><br>
+                                <input type="text" name="venta" value="{{../_id}}" style="display: none;"><br>
+                                <input type="text" name="cliente" value="{{../idcliente}}" style="display: none;"><br>
+                            </form>
+                            {{else}}
+                            {{#if_equal editable "1"}}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                    class="fa-solid fa-trash"></i>
+                                <span class="ml-2">Eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarpago?_method=DELETE">
+                                <input type="text" name="idpago" value="{{_id}}" style="display: none;"><br>
+                                <input type="text" name="venta" value="{{../_id}}" style="display: none;"><br>
+                                <input type="text" name="cliente" value="{{../idcliente}}" style="display: none;"><br>
+                            </form>
+
+                            {{/if_equal}}
+
+                            {{#if_equal editable "0"}}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-info btn-sm"><i
+                                    class="fas fa-edit"></i>
+                                <span class="ml-2">Solicitar permiso para eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="post" action="/modulos/ventas/spepago">
+                                <input type="text" id="" name="idpago" value="{{_id}}" style="display: none;"><br>
+                            </form>
+                            {{/if_equal}}
+
+                            {{#if_equal editable "2"}}
+                            <a class="btn btn-info btn-sm">
+                                <i class="fas fa-edit"></i>
+                                <span class="ml-2">Solicitud enviada</span>
+                            </a>
+                            {{/if_equal}}
+                            {{/if}}
+
+                            <p><b>Tipo de pago:</b> {{tipodepago}} </p>
+                            <p><b>Monto: </b>{{monto}} </p>
+                            {{#if_equal tipodepago "Cheque"}}
+                            <p><b>Banco:</b> {{bancocheque}} </p>
+                            <p><b>Numero de cuenta:</b> {{numerocuentacheque}} </p>
+                            <p><b>Numero de cheque:</b> {{numerocheque}} </p>
+                            {{/if_equal}}
+                            {{#if_equal tipodepago "Efectivo"}}
+                            <p><b>Tipo de pago efectivo:</b> {{tipoefectivo}} </p>
+                            {{/if_equal}}
+                            {{#if_equal tipodepago "Transferencia bancaria"}}
+                            <p><b>Banco de origen:</b> {{bancoorigentransferencia}} </p>
+                            <p><b>Numero de cuenta:</b> {{cuentaorigentransferencia}} </p>
+                            <p><b>Banco destino:</b> {{bancodestinotransferencia}} </p>
+                            <p><b>Numero de cuenta:</b> {{cuentadestinotransferencia}} </p>
+                            {{/if_equal}}
+                        </div>
+                        {{/each}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<br>
+{{/each}}
+
+
+
+
+<h5>Cobradas</h5>
+{{#each ventasp}}
+<button class="accordion cobrada">
+   <div style="display: flex; justify-content: space-between;">
+        <span><b>Venta:</b> {{codigoventa}}</span>
+        <span><b>Fecha:</b> {{createdAt}}</span>
+        <span><b>Monto por cobrar:</b> {{montoporpagar}}</span>
+    </div>
+</button>
+<div class="panel">
+    <div class="col-md-12 mx-auto table-responsive" id="{{montoporpagar}}">
+        <table border="1" class="table table-bordered table-sm .">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" colspan="2" class="">Detalle</th>
+                    <td colspan="2">{{detalle}} </td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="2">Fecha</th>
+                    <td colspan="2">{{createdAt}} </td>
+                </tr>
+                <tr>
+                    <th scope="col" colspan="4" class="titulo ">Productos</th>
+                </tr>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Total</th>
+                </tr>
+                {{#each productosdet}}
+                <tr>
+                    <td>{{name}} </td>
+                    <td>{{cantidad}} </td>
+                    <td>{{precio}}$ </td>
+                    <td>{{totalproducto}}$ </td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <th scope="row" colspan="2">Subtotal</th>
+                    <td colspan="2">{{subtotal}}$ </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Descuento</th>
+                    <td colspan="2">{{descuento}}%</td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Total</th>
+                    <td colspan="2">{{total}}$ </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Retención</th>
+                    <td colspan="2">{{retencion}}$ &nbsp
+                        {{#if pagos}}
+                        <span>!Ya no se puede editar la retención!</span>
+                        {{else}}
+                        <button type="button" onclick="asignarid('{{_id}}')" data-bs-toggle="modal"
+                            data-bs-target="#retencion">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        {{/if}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row" colspan="2">Por cobrar</th>
+                    <td colspan="2" id="porpagar{{_id}}"> {{montoporpagar}}$ </td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="4" class="titulo table-active  table-info">Pagos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" colspan="4"><button type="button" onclick="asignarid('{{_id}}')"
+                            class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalsalida">
+                            <i class="fas fa-plus"></i>
+                            Agregar Pago
+                        </button></th>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        {{#each pagos}}
+                        <button class="accordion">pago </button>
+                        <div class="panel">
+                            <br>
+                            {{#if isAdmin }}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                    class="fa-solid fa-trash"></i>
+                                <span class="ml-2">Eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarpago?_method=DELETE">
+                                <input type="text" name="idpago" value="{{_id}}" style="display: none;"><br>
+                                <input type="text" name="venta" value="{{../_id}}" style="display: none;"><br>
+                                <input type="text" name="cliente" value="{{../idpago}}" style="display: none;"><br>
+                            </form>
+                            {{else}}
+                            {{#if_equal editable "1"}}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-danger btn-sm"><i
+                                    class="fa-solid fa-trash"></i>
+                                <span class="ml-2">Eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="POST" action="/modulos/ventas/eliminarpago?_method=DELETE">
+                                <input type="text" name="idpago" value="{{_id}}" style="display: none;"><br>
+                                <input type="text" name="venta" value="{{../_id}}" style="display: none;"><br>
+                                <input type="text" name="cliente" value="{{../idpago}}" style="display: none;"><br>
+                            </form>
+
+                            {{/if_equal}}
+
+                            {{#if_equal editable "0"}}
+                            <button type="submit" form="solicitud{{_id}}" class="btn btn-info btn-sm"><i
+                                    class="fas fa-edit"></i>
+                                <span class="ml-2">Solicitar permiso para eliminar </span></button>
+                            <form id="solicitud{{_id}}" method="post" action="/modulos/ventas/spepago">
+                                <input type="text" id="" name="idpago" value="{{_id}}" style="display: none;"><br>
+                            </form>
+                            {{/if_equal}}
+
+                            {{#if_equal editable "2"}}
+                            <a class="btn btn-info btn-sm">
+                                <i class="fas fa-edit"></i>
+                                <span class="ml-2">Solicitud enviada</span>
+                            </a>
+                            {{/if_equal}}
+                            {{/if}}
+                            <p><b>Tipo de pago:</b> {{tipodepago}} </p>
+                            <p><b>Monto: </b>{{monto}} </p>
+                            {{#if_equal tipodepago "Cheque"}}
+                            <p><b>Banco:</b> {{bancocheque}} </p>
+                            <p><b>Numero de cuenta:</b> {{numerocuentacheque}} </p>
+                            <p><b>Numero de cheque:</b> {{numerocheque}} </p>
+                            {{/if_equal}}
+                            {{#if_equal tipodepago "Efectivo"}}
+                            <p><b>Tipo de pago efectivo:</b> {{tipoefectivo}} </p>
+                            {{/if_equal}}
+                            {{#if_equal tipodepago "Transferencia bancaria"}}
+                            <p><b>Banco de origen:</b> {{bancoorigentransferencia}} </p>
+                            <p><b>Numero de cuenta:</b> {{cuentaorigentransferencia}} </p>
+                            <p><b>Banco destino:</b> {{bancodestinotransferencia}} </p>
+                            <p><b>Numero de cuenta:</b> {{cuentadestinotransferencia}} </p>
+                            {{/if_equal}}
+                        </div>
+                        {{/each}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<br>
+{{/each}}
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    button.accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+    button.porcobrar{
+        background-color: #F9766F;
+    }
+    button.cobrada{
+        background-color: #A1F96F;
+    }
+
+    button.accordion.active,
+    button.accordion:hover {
+        background-color: #ddd;
+    }
+
+    button.accordion:after {
+        content: '\02795';
+        font-size: 13px;
+        color: #777;
+        float: right;
+        margin-left: 5px;
+    }
+
+    button.accordion.active:after {
+        content: "\2796";
+    }
+
+    div.panel {
+        padding: 0 18px;
+        background-color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.6s ease-in-out;
+        opacity: 0;
+    }
+
+    div.panel.show {
+        opacity: 1;
+        max-height: 4000px;
+    }
+
+    #miDiv {
+        filter: blur(5px);
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    function editarpago(id, tipo) {
+        if (tipo == "Cheque") {
+            document.getElementById("opciones1").selectedIndex = 1
+        } else if (tipo == "Efectivo") {
+            document.getElementById("opciones1").selectedIndex = 2
+        } else if (tipo == "Transferencia bancaria") {
+            document.getElementById("opciones1").selectedIndex = 3
+        }
+
+    }
+
+
+
+
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function () {
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+
+
+
+
+
+
+    function anadirProducto() {
+        const divproductos = document.getElementById("productosContenedor")
+        const producto = document.getElementById("productos").cloneNode(true)
+
+        producto.childNodes[1].childNodes[3].value = ""
+        producto.childNodes[3].childNodes[3].value = ""
+        producto.childNodes[5].childNodes[3].value = ""
+        /*producto.childNodes[5].childNodes[3].value = ""
+        producto.childNodes[7].childNodes[3].value = ""*/
+        const linea = document.createElement("hr")
+        linea.setAttribute("class", "linea")
+        divproductos.appendChild(linea)
+        divproductos.appendChild(producto)
+
+    }
+    function quitarProducto() {
+        const divproductos = document.getElementsByClassName("claseproductos")
+        const lineas = document.getElementsByClassName("linea")
+        lineas[lineas.length - 1].remove()
+        divproductos[divproductos.length - 1].remove()
+    }
+    function calcularsubtotal() {
+        const precios = document.getElementsByClassName("preciopro")
+        const cantidades = document.getElementsByClassName("cantidadpro")
+        const descuento = document.getElementById("descuento").value
+        const iva = document.getElementById("iva").value
+        let aux = 0;
+        let total = 0
+        console.log(precios[0])
+        console.log(cantidades[0])
+        for (i = 0; i < precios.length; i++) {
+            aux += precios[i].value * cantidades[i].value
+        }
+        total = aux - aux * (descuento / 100)
+        total = total + total * (iva / 100)
+
+        console.log(total)
+        console.log(descuento, iva)
+        document.getElementById("subtotal").value = aux.toFixed(2)
+        document.getElementById("total").value = total.toFixed(2)
+    }
+
+
+
+    function todos() {
+        quitarProducto()
+        calcularsubtotal()
+    }
+
+    function asignarid(id) {
+        document.getElementById("idventa").setAttribute("value", id)
+        document.getElementById("idventa2").setAttribute("value", id)
+
+    }
+
+    function controlarmonto() {
+        const aux = document.getElementById("idventa").value
+        const montoporpagar = document.getElementById("porpagar" + aux).innerText
+        const monto = document.getElementById("monto").value
+        const aux1 = Number(monto)
+        const aux2 = Number(montoporpagar)
+        console.log(aux1)
+        console.log(aux2)
+        if (aux1 > aux2) {
+            console.log("deshabilitar")
+            document.getElementById("botonguardarpago").disabled = true
+        } else {
+            console.log("habilitar")
+            document.getElementById("botonguardarpago").disabled = false
+        }
+    }
+
+
+
+
+
+
+
+    document.getElementById('opciones').addEventListener('change', function () {
+        var opcionSeleccionada = this.value;
+        console.log(opcionSeleccionada)
+
+        // Oculta todos los divs
+        var divs = document.querySelectorAll('.oculto');
+        divs.forEach(function (div) {
+            div.style.display = 'none';
+        });
+        if (opcionSeleccionada == "Cheque") {
+            document.getElementById("bancocheque").setAttribute('required', '');
+            document.getElementById("numerocuentacheque").setAttribute('required', '');
+            document.getElementById("numerocheque").setAttribute('required', '');
+            document.getElementById("fechagirocheque").setAttribute('required', '');
+
+            document.getElementById("tipoefectivo").removeAttribute('required');
+
+            document.getElementById("bancoorigentransferencia").removeAttribute('required');
+            document.getElementById("cuentaorigentransferencia").removeAttribute('required');
+            document.getElementById("bancodestinotransferencia").removeAttribute('required');
+            document.getElementById("cuentadestinotransferencia").removeAttribute('required');
+        }
+        else if (opcionSeleccionada == "Efectivo") {
+            document.getElementById("bancocheque").removeAttribute('required');
+            document.getElementById("numerocuentacheque").removeAttribute('required');
+            document.getElementById("numerocheque").removeAttribute('required');
+            document.getElementById("fechagirocheque").removeAttribute('required');
+
+            document.getElementById("tipoefectivo").setAttribute('required', '');
+
+            document.getElementById("bancoorigentransferencia").removeAttribute('required');
+            document.getElementById("cuentaorigentransferencia").removeAttribute('required');
+            document.getElementById("bancodestinotransferencia").removeAttribute('required');
+            document.getElementById("cuentadestinotransferencia").removeAttribute('required');
+        } else {
+            document.getElementById("bancocheque").removeAttribute('required');
+            document.getElementById("numerocuentacheque").removeAttribute('required');
+            document.getElementById("numerocheque").removeAttribute('required');
+            document.getElementById("fechagirocheque").removeAttribute('required');
+
+            document.getElementById("tipoefectivo").removeAttribute('required');
+
+            document.getElementById("bancoorigentransferencia").setAttribute('required', '');
+            document.getElementById("cuentaorigentransferencia").setAttribute('required', '');
+            document.getElementById("bancodestinotransferencia").setAttribute('required', '');
+            document.getElementById("cuentadestinotransferencia").setAttribute('required', '');
+        }
+
+        // Muestra el div correspondiente a la opción seleccionada
+        var divMostrar = document.getElementById('div' + opcionSeleccionada.charAt(0).toUpperCase() + opcionSeleccionada.slice(1));
+        console.log('div' + opcionSeleccionada.charAt(0).toUpperCase() + opcionSeleccionada.slice(1))
+        if (divMostrar) {
+            divMostrar.style.display = 'block';
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    document.getElementById('opciones1').addEventListener('change', function () {
+        var opcionSeleccionada = this.value;
+        console.log(opcionSeleccionada)
+
+        // Oculta todos los divs
+        var divs = document.querySelectorAll('.oculto');
+        divs.forEach(function (div) {
+            div.style.display = 'none';
+        });
+
+        if (opcionSeleccionada == "Cheque") {
+            document.getElementById("bancocheque1").setAttribute('required', '');
+            document.getElementById("numerocuentacheque1").setAttribute('required', '');
+            document.getElementById("numerocheque1").setAttribute('required', '');
+            document.getElementById("fechagirocheque1").setAttribute('required', '');
+
+            document.getElementById("tipoefectivo1").removeAttribute('required');
+
+            document.getElementById("bancoorigentransferencia1").removeAttribute('required');
+            document.getElementById("cuentaorigentransferencia1").removeAttribute('required');
+            document.getElementById("bancodestinotransferencia1").removeAttribute('required');
+            document.getElementById("cuentadestinotransferencia1").removeAttribute('required');
+        }
+        else if (opcionSeleccionada == "Efectivo") {
+            document.getElementById("bancocheque1").removeAttribute('required');
+            document.getElementById("numerocuentacheque1").removeAttribute('required');
+            document.getElementById("numerocheque1").removeAttribute('required');
+            document.getElementById("fechagirocheque1").removeAttribute('required');
+
+            document.getElementById("tipoefectivo1").setAttribute('required', '');
+
+            document.getElementById("bancoorigentransferencia1").removeAttribute('required');
+            document.getElementById("cuentaorigentransferencia1").removeAttribute('required');
+            document.getElementById("bancodestinotransferencia1").removeAttribute('required');
+            document.getElementById("cuentadestinotransferencia1").removeAttribute('required');
+        } else {
+            document.getElementById("bancocheque1").removeAttribute('required');
+            document.getElementById("numerocuentacheque1").removeAttribute('required');
+            document.getElementById("numerocheque1").removeAttribute('required');
+            document.getElementById("fechagirocheque1").removeAttribute('required');
+
+            document.getElementById("tipoefectivo1").removeAttribute('required');
+
+            document.getElementById("bancoorigentransferencia1").setAttribute('required', '');
+            document.getElementById("cuentaorigentransferencia1").setAttribute('required', '');
+            document.getElementById("bancodestinotransferencia1").setAttribute('required', '');
+            document.getElementById("cuentadestinotransferencia1").setAttribute('required', '');
+        }
+
+        // Muestra el div correspondiente a la opción seleccionada
+        var divMostrar = document.getElementById('div' + opcionSeleccionada.charAt(0).toUpperCase() + opcionSeleccionada.slice(1) + "1");
+        console.log(document.getElementById('div' + opcionSeleccionada.charAt(0).toUpperCase() + opcionSeleccionada.slice(1) + "1"))
+        if (divMostrar) {
+            divMostrar.style.display = 'block';
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+<style>
+    .oculto {
+        display: none;
+    }
+</style>

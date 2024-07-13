@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between mb-3">
+  <a  href="/modulos" role="button" style="text-decoration: none;"> <i class="fa-solid fa-chevron-left"></i>atras</a>
+
+</div>
+
+
+
+
+<div>
+  <h1 class="titulo">Usuarios</h1>
+</div>
+
+<div class="mt-4 table-responsive">
+  <table id="userTable" class="table">
+    <thead>
+      <tr class="mt-4">
+        <th>Nombre</th>
+        <th>Rol</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{rol}}</td>
+        <td>{{email}}</td>
+        <td>
+          <a href="/administration/update/{{_id}}" class=" btn btn-success btn-sm">
+            <i class="fas fa-edit"></i>
+            <span class="ml-2">Editar</span>
+          </a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-4">
+  <a href="/administration/add" class="btn btn-primary">
+    <i class="fas fa-plus"></i> <!-- Ícono -->
+    <span class="ml-2">Crear Usuario</span> <!-- Texto con margen a la izquierda (ml-2) -->
+  </a>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#userTable').DataTable();
+  });
+</script>
+
