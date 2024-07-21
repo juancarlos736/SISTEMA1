@@ -10,6 +10,7 @@ const mensajes = require("../helpers/mensajes")
 
 invrioCtrl.renderListaProductos = async (req, res) => {
   try {
+    
   } catch (error) {
     req.flash("error_msg", "Ha ocurrido un error");
     res.redirect("/modulos")

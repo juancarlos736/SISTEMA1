@@ -1,9 +1,8 @@
 const mongoose= require("mongoose")
 
-const {NOTES_APP_MONGODB_HOST, NOTES_APP_MONGODB_DATABASE, MONGODB_URI} = process.env
-
+const {URI} = process.env
 mongoose
-  .connect(MONGODB_URI)
+  .connect(URI)
   .then(() => {
     console.log("Connected to MongoDB");
   })
