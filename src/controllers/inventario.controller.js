@@ -116,7 +116,9 @@ invrioCtrl.despachaProductoo = async (req, res) => {
   const id = req.params.id
   const { cantidad, detalle, ie } = req.body;
   const producto = await Producto.findOne({ _id: id });
+  console.log(ie)
   if (ie == "si") {
+    console.log("if")
     if (cantidad > producto.cantidad) {
       req.flash("success_msg", "No existe suficiente cantidad de producto");
       res.redirect("/modulos/inventario");
@@ -124,12 +126,13 @@ invrioCtrl.despachaProductoo = async (req, res) => {
     } else {
       await Producto.findByIdAndUpdate(id, { $inc: { "cantidad": -cantidad } })
       const produ2 = await Producto.findOneAndUpdate({ "idproducto": id }, { $inc: { "cantidad": cantidad * producto.presentacion } })
+      const produ3 = await Producto.findOne({ "idproducto": id })
       const newRegistro2 = new Registro({
-        "idproducto": produ2._id, "cantidad": cantidad,
+        "idproducto": produ3._id, "cantidad": cantidad*produ3.presentacion,
         "idusuario": req.user._id,
         "tipooperacion": "entrada",
         "detalle": detalle,
-        "cantidadactual": produ2.cantidad
+        "cantidadactual": produ3.cantidad
       });
       await newRegistro2.save()
       const pro = await Producto.findById(id)
@@ -145,13 +148,13 @@ invrioCtrl.despachaProductoo = async (req, res) => {
       res.redirect("/modulos/inventario");
     }
   } else {
+    console.log("else")
     if (cantidad > producto.cantidad) {
       req.flash("success_msg", "No existe suficiente cantidad de producto");
       res.redirect("/modulos/inventario");
 
     } else {
       await Producto.findByIdAndUpdate(id, { $inc: { "cantidad": -cantidad } })
-      await Producto.findOneAndUpdate({ "idproducto": id }, { $inc: { "cantidad": cantidad } })
       const pro = await Producto.findById(id)
       const newRegistro = new Registro({
         "idproducto": id, "cantidad": -cantidad,
