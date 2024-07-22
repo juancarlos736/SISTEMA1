@@ -108,7 +108,7 @@ ventasCtrl.agregarpago = async (req, res) => {
       numerocuentacheque, numerocheque, fechagirocheque, tipoefectivo, bancodestinotransferencia, bancoorigentransferencia,
       cuentadestinotransferencia, cuentaorigentransferencia } = req.body
     const vent = await Venta.findById(idventa)
-    if (Number(monto) > venta.montoporpagar) {
+    if (Number(monto) > vent.montoporpagar) {
       res.redirect(`/modulos/ventas/${req.params.id}`)
     } else {
       await Venta.updateOne({ "_id": idventa }, { "montoporpagar": vent.montoporpagar - Number(monto).toFixed(2) })

@@ -210,7 +210,7 @@ comprasCtrl.eliminarpago = async (req, res) => {
     const provee = await Proveedor.findById(compra.idproveedor)
     await Proveedor.findByIdAndUpdate(compra.idproveedor, { "deuda": provee.deuda + pago.monto })
     await Pago.findByIdAndDelete(idpago)
-    res.redirect(`/modulos/ventas/${compra.idproveedor}`)
+    res.redirect(`/modulos/compras/${compra.idproveedor}`)
   } catch (error) {
     req.flash("error_msg", "Ha ocurrido un error");
     res.redirect("/modulos")
