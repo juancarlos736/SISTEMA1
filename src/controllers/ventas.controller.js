@@ -224,7 +224,7 @@ ventasCtrl.eliminarventa = async (req, res) => {
       req.flash("success_msg", "Para eliminar una venta no debe tener asociado un pago");
       res.redirect(`/modulos/ventas/${cliente}`)
     } else {
-      const cliente1 = await Cliente.findById(entaaux.idcliente)
+      const cliente1 = await Cliente.findById(ventaaux.idcliente)
       await Cliente.findByIdAndUpdate(ventaaux.idcliente, { "deuda": cliente1.deuda - ventaaux.montoporpagar })
       await Venta.findByIdAndDelete(venta)
       res.redirect(`/modulos/ventas/${cliente}`)
